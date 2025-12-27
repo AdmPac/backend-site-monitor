@@ -10,4 +10,12 @@ class Site extends Model
         'title',
         'url',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function logs() {
+        return $this->hasMany(Log::class);
+    }
 }

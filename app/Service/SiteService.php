@@ -5,9 +5,9 @@ namespace App\Service;
 use App\Models\Site;
 use Illuminate\Support\Facades\Http;
 
-class MonitoringSite
+class SiteService
 {
-    public function monitor(Site $site): array
+    public function check(Site $site): array
     {
         $response = Http::get($site->url);
         return [
@@ -24,7 +24,6 @@ class MonitoringSite
             'redirect' => $response->redirect(), // массив с информацией о редиректах
 
             // Группа «Проверка контента и Безопасность»
-            'body' => $response->body(), // весь HTML код
             'headers' => $response->headers(), // список всех заголовков
             'cookies' => $response->cookies(), // список всех куков
         ];

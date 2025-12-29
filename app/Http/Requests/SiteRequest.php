@@ -28,7 +28,7 @@ class SiteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:sites,title',
             'full_url' => 'required|string|max:255|url',
             'base_url' => 'required|string|max:255|unique:sites,base_url',
         ];
@@ -40,6 +40,7 @@ class SiteRequest extends FormRequest
             'title.required' => 'Поле title обязательно для заполнения',
             'title.string' => 'Поле title должно быть строкой',
             'title.max' => 'Поле title должно быть не более 255 символов',
+            'title.unique' => 'Сайт с таким названием уже существует',
             'full_url.required' => 'Поле full_url обязательно для заполнения',
             'full_url.string' => 'Поле full_url должно быть строкой',
             'full_url.max' => 'Поле full_url должно быть не более 255 символов',

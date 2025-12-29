@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 final class DomainName
 {
-    private string $base_url;
+    private ?string $base_url = null;
 
     public function __construct(private readonly string $full_url)
     {
@@ -28,8 +28,7 @@ final class DomainName
         $host = preg_replace('/^www\./', '', $host);
 
         // Убираем доменную зону (.com, .ru, .com.ua и т.д.)
-        $pureDomain = preg_replace('/\.[^.]+$/', '', $host);
-        
-        return $pureDomain;
+        $this->base_url = preg_replace('/\.[^.]+$/', '', $host);
+        return $this->base_url;
     }
 }

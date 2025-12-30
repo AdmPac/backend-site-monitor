@@ -12,7 +12,7 @@ class SiteService
     public function getData(Site $site): MainData
     {
         $domain = new DomainName($site->full_url);
-        $response = Http::get($domain->getFullUrl());
+        $response = Http::timeout(5)->get($domain->getFullUrl());
         $mainData = MainData::createFromHttp($response);
         return $mainData;
     }

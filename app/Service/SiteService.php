@@ -17,7 +17,7 @@ class SiteService
             $response = Http::timeout(5)->get($domain->getFullUrl());
             $mainData = MainData::createFromHttp($response);
             return $mainData;
-        } catch (ConnectionException $e) {
+        } catch (\Throwable $e) {
             return new MainData(
                 successful: false,
                 status: 0,

@@ -23,6 +23,23 @@ readonly class MainData
         public array $headers,
     ){}
 
+    public function toArray()
+    {
+        return [
+            'successful' => $this->successful, 
+            'status' => $this->status, 
+            'failed' => $this->failed, 
+            'serverError' => $this->serverError, 
+            'reason' => $this->reason, 
+            
+            'handlerStats' => $this->handlerStats, 
+            // TODO: добавить toArray к effectiveUri
+            'redirect' => $this->redirect, 
+
+            'headers' => $this->headers, 
+        ];
+    }
+
     public static function createFromHttp(Response $response)
     {
         return new self(

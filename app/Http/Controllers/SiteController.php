@@ -4,10 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SiteRequest;
 use App\Models\Site;
+use App\Service\SiteService;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SiteController extends Controller
 {
+
+    public function __construct(private SiteService $siteService)
+    {
+    }
 
     public function index()
     {
@@ -45,12 +51,15 @@ class SiteController extends Controller
     public function get(int $id)
     {
         $site = Site::find($id);
-        if (!$site) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Сайта не существует',
-            ], 404);
-        } 
+        if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
         return response()->json($site);
+    }
+
+    public function info(int $id)
+    {
+        $site = Site::find($id);
+        if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
+        $data = $this->siteService->getData($site);
+        return response()->json($data);
     }
 }

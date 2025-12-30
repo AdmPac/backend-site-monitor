@@ -16,7 +16,7 @@ readonly class MainData
         
         // Группа «Глубокий сетевой анализ» (Киллер-фичи)
         public array $handlerStats,
-        public UriInterface $effectiveUri,
+        public ?UriInterface $effectiveUri,
         public bool $redirect,
 
         // Группа «Проверка контента и Безопасность»

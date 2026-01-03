@@ -16,12 +16,29 @@ readonly class MainData
         
         // Группа «Глубокий сетевой анализ» (Киллер-фичи)
         public array $handlerStats,
-        public UriInterface $effectiveUri,
+        public ?UriInterface $effectiveUri,
         public bool $redirect,
 
         // Группа «Проверка контента и Безопасность»
         public array $headers,
     ){}
+
+    public function toArray()
+    {
+        return [
+            'successful' => $this->successful, 
+            'status' => $this->status, 
+            'failed' => $this->failed, 
+            'serverError' => $this->serverError, 
+            'reason' => $this->reason, 
+            
+            'handlerStats' => $this->handlerStats, 
+            // TODO: добавить toArray к effectiveUri
+            'redirect' => $this->redirect, 
+
+            'headers' => $this->headers, 
+        ];
+    }
 
     public static function createFromHttp(Response $response)
     {

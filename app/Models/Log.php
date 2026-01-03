@@ -9,7 +9,7 @@ class Log extends Model
     protected $fillable = [
         'site_id',
         'status_code',
-        'message',
+        'response_time',
     ];
 
     public function status() {

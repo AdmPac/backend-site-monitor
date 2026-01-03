@@ -23,6 +23,7 @@ services:
             - sail
         depends_on:
             - mysql
+            - mongodb
     mysql:
         image: 'mysql:8.4'
         ports:
@@ -48,9 +49,30 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    mongodb:
+        image: 'mongo:latest'
+        ports:
+            - '${FORWARD_MONGODB_PORT:-27017}:27017'
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: '${MONGODB_USERNAME:-root}'
+            MONGO_INITDB_ROOT_PASSWORD: '${MONGODB_PASSWORD:-password}'
+        volumes:
+            - 'sail-mongodb:/data/db'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - mongosh
+                - '--eval'
+                - "db.runCommand({ping:1})"
+            retries: 3
+            timeout: 5s
 networks:
     sail:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-mongodb:
         driver: local

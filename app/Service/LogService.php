@@ -3,25 +3,26 @@
 namespace App\Service;
 
 use App\DTO\MainData;
-use App\Models\Log;
 use App\Models\Site;
-use App\ValueObjects\DomainName;
-use Illuminate\Support\ItemNotFoundException;
+use App\Models\SiteLog;
+use Illuminate\Support\Facades\DB;
 
 class LogService
 {
-    public function log(MainData $response) {
-        // dd($response);
-        $url = $response->handlerStats['url'];
-        // dd($url);
-        $pureDomain = (new DomainName($url))->getBaseUrl();
-        // TODO: добавить pureDomain в таблицу, где будет отекать разный вид одного url
-        $site = Site::where('url', $url)->first();
-        if (!$site) throw new ItemNotFoundException("Not found url: $url");
-        // $siteId;
-        //TODO: добавить логирование(логгер не должен создавать записи - только логировать/выводить ошибки)
-        // $newLog = new Log;
-        // // $newLog->
-        // Log::add();
+    public function log(Site $site, MainData $mainData) {
+        DB::transaction(function () use ($site, $mainData) {
+            $log = $site->logs()->create([
+                'status_code' => $mainData->status,
+                'response_time' => data_get($mainData->handlerStats, 'total_time', 0),
+            ]);
+        
+            DB::afterCommit(function () use ($log, $site, $mainData) {
+                SiteLog::create([
+                    'log_id' => $log->id,
+                    'site_id' => $site->id,
+                    'data' => $mainData->toArray(),
+                ]);
+            });
+        });
     }
 }

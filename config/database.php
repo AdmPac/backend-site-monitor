@@ -17,7 +17,6 @@ return [
     */
 
     'default' => env('DB_CONNECTION', 'sqlite'),
-
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -30,6 +29,18 @@ return [
     */
 
     'connections' => [
+
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'host' => env('MONGODB_HOST', env('LARAVEL_SAIL') ? 'mongodb' : '127.0.0.1'),
+            'port' => (int) env('MONGODB_PORT', 27017),
+            'database' => env('MONGODB_DATABASE', 'monitor_logs'),
+            'username' => env('MONGODB_USERNAME', 'root'),
+            'password' => env('MONGODB_PASSWORD', 'password'),
+            'options' => [
+                'database' => env('MONGODB_AUTH_DATABASE', 'admin'),
+            ],
+        ],
 
         'sqlite' => [
             'driver' => 'sqlite',

@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SiteRequest;
 use App\Models\Site;
-use Illuminate\Http\Request;
+use App\Service\SiteService;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SiteController extends Controller
 {
+
+    public function __construct(private SiteService $siteService)
+    {
+    }
 
     public function index()
     {
@@ -15,20 +22,44 @@ class SiteController extends Controller
         ]);
     }
 
-    public function add(Request $request)
+    public function create(SiteRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'url' => 'required|url',
-        ]);
-
+        $data = $request->validated();
         $site = Site::create([
-            'title' => $request->title,
-            'url' => $request->url,
+            'title' => $data['title'],
+            'full_url' => $data['full_url'],
+            'base_url' => $data['base_url'],
+            'user_id' => Auth::id(),
         ]);
+        if ($site) {
+            return response()->json([
+                'message' => 'Сайт успешно добавлен',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Ошибка добавления сайта',
+            ], 500);
+        }
+    }
 
-        return response()->json([
-            'message' => 'Sites fetched successfully',
-        ]);
+    public function all()
+    {
+        $data = Site::where('user_id', Auth::id())->get();
+        return response()->json($data);
+    }
+
+    public function get(int $id)
+    {
+        $site = Site::find($id);
+        if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
+        return response()->json($site);
+    }
+
+    public function info(int $id)
+    {
+        $site = Site::find($id);
+        if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
+        $data = $this->siteService->getData($site);
+        return response()->json($data);
     }
 }

@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\UserScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 
+#[ScopedBy([UserScope::class])]
 class Site extends Model
 {
     protected $fillable = [
         'title',
-        'url',
+        'full_url',
+        'base_url',
+        'user_id',
     ];
 
     public function user() {

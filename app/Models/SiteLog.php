@@ -4,7 +4,6 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 
-
 class SiteLog extends Model
 {
     protected $connection = 'mongodb';
@@ -13,6 +12,6 @@ class SiteLog extends Model
     protected $fillable = [
         'log_id',  
         'site_id',
-        'data'  
+        'data'
     ];
 }

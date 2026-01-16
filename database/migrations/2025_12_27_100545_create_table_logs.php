@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logs', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('site_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('site_id')->constrained()->onDelete('cascade');
             $table->integer('status_code');
             $table->char('message', 255);
             $table->timestamps();

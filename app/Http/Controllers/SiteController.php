@@ -48,14 +48,14 @@ class SiteController extends Controller
         return response()->json($data);
     }
 
-    public function get(int $id)
+    public function get(string $id)
     {
         $site = Site::find($id);
         if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
         return response()->json($site);
     }
 
-    public function info(int $id)
+    public function info(string $id)
     {
         $site = Site::find($id);
         if (!$site) throw new NotFoundHttpException(message: 'Сайта не существует', code: 404);
